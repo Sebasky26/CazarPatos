@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">CazarPatos</string>
+    <string name="app_name">Cazar Patos</string>
+    <string name="usuario_txt">Usuario</string>
+    <string name="contrasena_txt">Contrasena</string>
+    <string name="login_txt">LOGIN</string>
+    <string name="btn_login">Entrar</string>
 </resources>
