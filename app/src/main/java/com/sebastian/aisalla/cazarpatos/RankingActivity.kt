@@ -19,6 +19,8 @@ class RankingActivity : AppCompatActivity() {
         LeerRankingsSQLite()
     }
 
+
+    // FUNCIONES PARA INTERACTUAR CON LA DB
     fun OperacionesSqLite(){
         RankingPlayerDBHelper(this).deleteAllRanking()
         RankingPlayerDBHelper(this).insertRankingByQuery(Player("Jugador9",10))
