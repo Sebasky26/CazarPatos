@@ -50,6 +50,7 @@ class RankingActivity : AppCompatActivity() {
         recyclerViewRanking.setHasFixedSize(true)
     }
 
+
 }
 
 
