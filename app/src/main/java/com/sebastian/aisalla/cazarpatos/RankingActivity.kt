@@ -1,12 +1,17 @@
 package com.sebastian.aisalla.cazarpatos
 
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.sebastian.aisalla.cazarpatos.database.RankingPlayerDBHelper
 
 class RankingActivity : AppCompatActivity() {
@@ -14,9 +19,10 @@ class RankingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ranking)
 
-        OperacionesSqLite()
-        GrabarRankingSQLite()
-        LeerRankingsSQLite()
+//        OperacionesSqLite()
+//        GrabarRankingSQLite()
+//        LeerRankingsSQLite()
+        consultarPuntajeJugadores()
     }
 
 
@@ -50,7 +56,31 @@ class RankingActivity : AppCompatActivity() {
         recyclerViewRanking.setHasFixedSize(true)
     }
 
-
+    fun consultarPuntajeJugadores() {
+        val db = Firebase.firestore
+        db.collection("ranking")
+            .orderBy("huntedDucks", Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener { result ->
+                Log.d(EXTRA_LOGIN, "Success getting documents")
+                var jugadores = ArrayList<Player>()
+                for (document in result) {
+                    val jugador = document.toObject(Player::class.java)
+                    //val jugador = document.toObject<Player>()
+                    jugadores.add(jugador)
+                }
+                //Poblar en RecyclerView información usando mi adaptador
+                val recyclerViewRanking: RecyclerView = findViewById(R.id.recyclerViewRanking);
+                recyclerViewRanking.layoutManager = LinearLayoutManager(this);
+                recyclerViewRanking.adapter = RankingAdapter(jugadores);
+                recyclerViewRanking.setHasFixedSize(true);
+            }
+            .addOnFailureListener { exception ->
+                Log.w(EXTRA_LOGIN, "Error getting documents.", exception)
+                Toast.makeText(this, "Error al obtener datos de jugadores", Toast.LENGTH_LONG)
+                    .show()
+            }
+    }
 }
 
 
